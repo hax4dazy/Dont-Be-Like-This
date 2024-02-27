@@ -40,7 +40,7 @@ async def on_ready():
 async def on_guild_remove(guild: discord.Guild):
     GuildSettings.delete().where(GuildSettings.ServerID == guild.id).execute()
 
-@bot.slash_command(name="setup")
+@bot.slash_command(name="Setup", description="Set the channel where the bot will send the messages")
 @discord.default_permissions(manage_messages=True)
 async def global_command(ctx: discord.ApplicationContext, channel: discord.TextChannel): 
         if GuildSettings.get_or_none(ServerID=ctx.guild.id) is None:
