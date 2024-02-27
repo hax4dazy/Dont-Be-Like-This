@@ -5,8 +5,6 @@ from db import *
 intents = discord.Intents.default()
 bot = discord.Bot(intents=intents)
 
-db.create_tables([GuildSettings, BotSettings])
-
 try:
     discord_token = BotSettings.get(BotSettings.id == 1).BotToken
 except Exception as e:
