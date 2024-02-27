@@ -1,2 +1,2 @@
 # Dont Be Like This
- re-creation of Slluxx's discord bot
+Because slluxx forgot to upload the source code to GitHub 💀
