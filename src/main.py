@@ -71,7 +71,7 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
 
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
-        await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡{message.author.name}', avatar_url=message.author.avatar.url)
+        await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡{message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none())
     await ctx.send_response(f"🤡 <@{message.author.id}>", ephemeral=True)
 
 bot.run(discord_token)
