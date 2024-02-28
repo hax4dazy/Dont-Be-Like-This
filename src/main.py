@@ -28,11 +28,15 @@ class YesOrNoButtons(discord.ui.View):
         with db.atomic() as txn:
             GuildSettings.update(ChannelID=self.channel_ID).where(GuildSettings.ServerID == interaction.message.guild.id).execute()
         self.disable_all_items()
+        # Ends the interaction timeout to prevent on_timeout from being called
+        self.stop()
         await interaction.response.edit_message(content="Alright, the channel has been updated", view=self)
 
     @discord.ui.button(label="No", row=0, style=discord.ButtonStyle.primary)
     async def second_button_callback(self, button, interaction):
         self.disable_all_items()
+        # Ends the interaction timeout to prevent on_timeout from being called
+        self.stop()
         await interaction.response.edit_message(content="Alright, no changes have been made", view=self)
 
 @bot.event
