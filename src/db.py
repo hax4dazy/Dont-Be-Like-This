@@ -19,4 +19,4 @@ class BotSettings(MySQLModel):
 
 
 if __name__ == "__main__":
-  db.create_tables([GuildSettings, BotSettings])
+  db.create_tables([GuildSettings, BotSettings], safe=True)
