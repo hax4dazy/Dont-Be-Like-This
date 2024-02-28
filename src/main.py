@@ -55,7 +55,8 @@ async def global_command(ctx: discord.ApplicationContext, channel: discord.TextC
         else:
             await ctx.respond(f"It looks like you already have a channel set for messages.\nWould you like to update it?", view=YesOrNoButtons(timeout=20, channel_ID=channel.id), ephemeral=True) 
 
-@bot.message_command(name="Don't be like this")  
+@bot.message_command(name="Don't be like this")
+@discord.default_permissions(manage_messages=True)
 async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Message):  
     if ctx.guild is None:
         await ctx.send_response(f"You cannot use this command in DMs!", ephemeral=True)
