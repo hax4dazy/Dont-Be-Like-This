@@ -14,6 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      env: 
+        DOCKERIO_PASSWORD: ${{ secrets.dockerio_password }}
+        DOCKERIO_USERNAME: ${{ secrets.dockerio_username }}
     - name: Login to DockerIO
       run: echo $dockerio_password | docker login -u $dockerio_username --password-stdin
     - name: Build the Docker image
