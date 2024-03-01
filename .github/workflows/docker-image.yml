@@ -18,7 +18,7 @@ jobs:
         DOCKERIO_PASSWORD: ${{ secrets.dockerio_password }}
         DOCKERIO_USERNAME: ${{ secrets.dockerio_username }}
     - name: Login to DockerIO
-      run: echo $dockerio_password | docker login -u $dockerio_username --password-stdin
+      run: docker login -u $DOCKERIO_USERNAME -p $DOCKERIO_PASSWORD
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag hax4dayz/dont-be-like-this:latest
     - name: Push image to docker hub
