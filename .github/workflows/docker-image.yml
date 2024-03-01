@@ -14,5 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Login to DockerIO
+      run: echo $dockerio_password | docker login -u $dockerio_username --password-stdin
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag hax4dayz/dont-be-like-this:latest
+    - name: Push image to docker hub
+      run: docker image push hax4dayz/dont-be-like-this:latest
