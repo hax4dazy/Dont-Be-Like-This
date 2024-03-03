@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - 'README.md'
       - 'Privacy Policy.md'
-      - '.github'
+      - '.github/**'
       - 'LICENSE'
 
 jobs:
