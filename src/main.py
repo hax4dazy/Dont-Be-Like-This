@@ -89,8 +89,15 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
     message_attachments = [await attachment.to_file() for attachment in message.attachments]
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
-        await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡 {message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
+        
+        try:
+            await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡 {message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
+            await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
+        except Exception as e:
 
-    await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
+            await ctx.respond(f"😭 Failed to clown <@{message.author.id}>... if this keeps happening, please contact the bot owner", ephemeral=True)
+            # Log the error
+            print(f"Failed to clown on {message.author.name} in {message.guild.name} ({message.guild.id})")
+            print(e)
 
 bot.run(discord_token)
