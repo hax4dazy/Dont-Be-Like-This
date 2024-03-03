@@ -68,15 +68,43 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
     if ctx.author.id == bot.user.id:
         await ctx.send_response(f"I can't clown on my own messages!", ephemeral=True)
         return
+    if message.author.bot:
+        await ctx.send_response(f"I can't clown on other bots!", ephemeral=True)
+        return
+    
+
     webhook_url = GuildSettings.get_or_none(GuildSettings.ServerID == ctx.guild.id)
     if webhook_url is None:
         await ctx.send_response(f"You cannot use the bot without setting it up first! Run the /setup command to set the bot up!", ephemeral=True)
         return
+    
+    if len(message.content) == 0 and len(message.attachments) == 0:
+        await ctx.send_response(f"The message you're trying to clown on is empty!", ephemeral=True)
+        return
+
+    
+    webhook_content=f'[[Original Message](<{message.jump_url}>)] {message.content}'
+
+    if len(webhook_content) > 2000 or len(message.content) > 2000:
+        return await ctx.send_response(f"😐 Uh oh, I won't be able to send this message since it's too long (> 2000 characters)... might wanna just take a screenshot of it instead? 📸", ephemeral=True)
+    
     webhook_url = webhook_url.WebHookURL
 
+    # Defer the response to prevent the bot from timing out if the webhook takes too long to send the message (defer ephemeral)
+    await ctx.response.defer(ephemeral=True)
+
+    message_attachments = [await attachment.to_file() for attachment in message.attachments]
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
-        await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡{message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none())
-    await ctx.send_response(f"🤡 <@{message.author.id}>", ephemeral=True)
+        
+        try:
+            await webhook.send(content=webhook_content, username=f'🤡 {message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
+            await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
+        except Exception as e:
+
+            await ctx.respond(f"😭 Failed to clown <@{message.author.id}>... if this keeps happening, please contact the bot owner", ephemeral=True)
+            # Log the error
+            print(f"Failed to clown on {message.author.name} in {message.guild.name} ({message.guild.id})")
+            print(e)
 
 bot.run(discord_token)
