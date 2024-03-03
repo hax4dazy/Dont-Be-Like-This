@@ -68,6 +68,9 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
     if ctx.author.id == bot.user.id:
         await ctx.send_response(f"I can't clown on my own messages!", ephemeral=True)
         return
+    if message.author.bot:
+        await ctx.send_response(f"I can't clown on other bots!", ephemeral=True)
+        return
     webhook_url = GuildSettings.get_or_none(GuildSettings.ServerID == ctx.guild.id)
     if webhook_url is None:
         await ctx.send_response(f"You cannot use the bot without setting it up first! Run the /setup command to set the bot up!", ephemeral=True)
