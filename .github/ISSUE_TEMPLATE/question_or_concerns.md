@@ -1,0 +1,15 @@
+---
+name: Questions and Concerns about the Privacy Policy
+about: If you have any questions or concerns about the Privacy Policy, please use this template.
+title: "[Questions And Concerns]"
+labels: Questions and Concerns
+assignees: hax4dazy
+body:
+    - type: textarea
+        id: privacy_policy_concerns
+        attributes:
+            label: "Please provide a detailed description of your question or concern about the Privacy Policy."
+            description: "Please provide a detailed description of your question or concern about the Privacy Policy."
+            placeholder: "I have a question about the data that is collected by the bot."
+```
+
