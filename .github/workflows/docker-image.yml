@@ -5,10 +5,10 @@ on:
     branches:
       - "main"
     paths-ignore:
-      - '**/README.md'
-      - '**/Privacy Policy.md'
-      - '**/.github'
-      - '**/LICENSE'
+      - 'README.md'
+      - 'Privacy Policy.md'
+      - '.github'
+      - 'LICENSE'
 
 jobs:
   build:
