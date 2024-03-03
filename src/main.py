@@ -75,6 +75,12 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
     if webhook_url is None:
         await ctx.send_response(f"You cannot use the bot without setting it up first! Run the /setup command to set the bot up!", ephemeral=True)
         return
+    if len(message.content) == 0 and len(message.attachments) == 0:
+        await ctx.send_response(f"The message you're trying to clown on is empty!", ephemeral=True)
+        return
+    if len(message.content) > 2000:
+        await ctx.send_response(f"The message you're trying to clown on is too long! (Max 2000 characters) Might wanna just take a screenshot of it instead.", ephemeral=True)
+        return
     webhook_url = webhook_url.WebHookURL
 
     # Defer the response to prevent the bot from timing out if the webhook takes too long to send the message (defer ephemeral)
