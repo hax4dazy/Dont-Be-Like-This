@@ -77,6 +77,8 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
         return
     webhook_url = webhook_url.WebHookURL
 
+    # Defer the response to prevent the bot from timing out if the webhook takes too long to send the message (defer ephemeral)
+    await ctx.response.defer(ephemeral=True)
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
         await webhook.send(content=f'[[Original Message](<{message.jump_url}>)] {message.content}', username=f'🤡{message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none())
