@@ -14,9 +14,9 @@ except Exception as e:
     exit()
 
 class YesOrNoButtons(discord.ui.View):
-    def __init__(self, channel_ID, timeout):
+    def __init__(self, discordchannel, timeout):
         super().__init__()
-        self.channel_ID = channel_ID
+        self.channel = discordchannel
         self.timeout = timeout
 
     async def on_timeout(self):
@@ -27,7 +27,7 @@ class YesOrNoButtons(discord.ui.View):
     async def first_button_callback(self, button, interaction):
         webhook = await self.channel.create_webhook(name="Don't Be Like This Bot")
         with db.atomic() as txn:
-            GuildSettings.update(ChannelID=self.channel_ID).where(GuildSettings.ServerID == interaction.message.guild.id, GuildSettings.WebHookURL == webhook.url).execute()
+            GuildSettings.update(ChannelID=self.channel.id, WebHookURL=webhook.url).where(GuildSettings.ServerID == interaction.message.guild.id).execute()
         self.disable_all_items()
         # Ends the interaction timeout to prevent on_timeout from being called
         self.stop()
@@ -58,7 +58,7 @@ async def global_command(ctx: discord.ApplicationContext, channel: discord.TextC
                 GuildSettings.create(ServerID=ctx.guild.id, ChannelID=channel.id, WebHookURL=webhook.url)
             await ctx.respond(f"Set the channel to <#{channel.id}>!", ephemeral=True)
         else:
-            await ctx.respond(f"It looks like you already have a channel set for messages.\nWould you like to update it?", view=YesOrNoButtons(timeout=20, channel_ID=channel.id), ephemeral=True) 
+            await ctx.respond(f"It looks like you already have a channel set for messages.\nWould you like to update it?", view=YesOrNoButtons(timeout=20, discordchannel=channel), ephemeral=True) 
 
 @bot.message_command(name="Don't be like this")
 @discord.default_permissions(manage_messages=True)
