@@ -25,8 +25,9 @@ class YesOrNoButtons(discord.ui.View):
     
     @discord.ui.button(label="Yes", row=0, style=discord.ButtonStyle.danger)
     async def first_button_callback(self, button, interaction):
+        webhook = await self.channel.create_webhook(name="Don't Be Like This Bot")
         with db.atomic() as txn:
-            GuildSettings.update(ChannelID=self.channel_ID).where(GuildSettings.ServerID == interaction.message.guild.id).execute()
+            GuildSettings.update(ChannelID=self.channel_ID).where(GuildSettings.ServerID == interaction.message.guild.id, GuildSettings.WebHookURL == webhook.url).execute()
         self.disable_all_items()
         # Ends the interaction timeout to prevent on_timeout from being called
         self.stop()
