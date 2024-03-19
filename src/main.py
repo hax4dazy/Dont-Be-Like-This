@@ -98,24 +98,15 @@ async def dont_be_like_this(ctx: discord.ApplicationContext, message: discord.Me
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url(webhook_url, session=session)
         
-        if message.author.avatar is None:
-            try:
-                await webhook.send(content=webhook_content, username=f'🤡 {message.author.name}', allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
-                await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
-            except Exception as e:
-                await ctx.respond(f"😭 Failed to clown <@{message.author.id}>... if this keeps happening, please contact the bot owner", ephemeral=True)
-                # Log the error
-                print(f"Failed to clown on {message.author.name} in {message.guild.name} ({message.guild.id})")
-                print(e)
-        else:
-            try:
-                await webhook.send(content=webhook_content, username=f'🤡 {message.author.name}', avatar_url=message.author.avatar.url, allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
-                await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
-            except Exception as e:
+        avatar_url = message.author.avatar.url if message.author.avatar is not None else None
 
-                await ctx.respond(f"😭 Failed to clown <@{message.author.id}>... if this keeps happening, please contact the bot owner", ephemeral=True)
-                # Log the error
-                print(f"Failed to clown on {message.author.name} in {message.guild.name} ({message.guild.id})")
-                print(e)
+        try:
+            await webhook.send(content=webhook_content, username=f'🤡 {message.author.name}', avatar_url=avatar_url, allowed_mentions=discord.AllowedMentions.none(), files=message_attachments)
+            await ctx.respond(f"🤡 Successfully clowned <@{message.author.id}>")
+        except Exception as e:
+            await ctx.respond(f"😭 Failed to clown <@{message.author.id}>... if this keeps happening, please contact the bot owner", ephemeral=True)
+            # Log the error
+            print(f"Failed to clown on {message.author.name} in {message.guild.name} ({message.guild.id})")
+            print(e)
 
 bot.run(discord_token)
