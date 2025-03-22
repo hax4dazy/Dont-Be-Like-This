@@ -7,8 +7,6 @@ Because slluxx forgot to upload the source code to GitHub 💀
 ### Docker Compose
 
 ```docker-compose
-version: '3.7'
-
 services:
   app:
     image: hax4dayz/dont-be-like-this
